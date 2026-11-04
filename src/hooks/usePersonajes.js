@@ -1,0 +1,32 @@
+
+import { useState, useEffect } from 'react'
+import { fetchPersonajes } from '../services/fetchPersonajes.js'
+
+const usePersonajes = () => {
+  const [personajes, setPersonajes] = useState([])
+  const [cargando, setCargando] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    const cargarPersonajes = async () => {
+      try {
+        const datos = await fetchPersonajes()
+        setPersonajes(datos)
+      } catch (err) {
+        setError(err.message)
+      } finally {
+        setCargando(false)
+      }
+    }
+
+    cargarPersonajes()
+  }, [])
+
+  return {
+    personajes,
+    cargando,
+    error
+  }
+}
+
+export default usePersonajes
